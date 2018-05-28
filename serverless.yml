@@ -1,0 +1,50 @@
+service: ${env:SERVICE_NAME} 
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: ${env:ENV}
+  region: ap-southeast-2
+  environment:
+    DEBUG: "*"
+    PAGE_LOAD_TIMEOUT: 20000
+    LOGGING: true
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+        - "s3:Put*"
+        - "s3:GetObject"
+        - "s3:DeleteObject"
+      Resource:
+        - "arn:aws:s3:::*"
+        - "arn:aws:s3:::*/*"
+
+plugins:
+  - serverless-plugin-chrome
+  - serverless-webpack
+#  - serverless-offline
+
+custom:
+  chrome:
+    flags:
+      - --window-size=1280,1696 # Letter size
+      - --hide-scrollbars
+
+functions:
+  screenshot:
+    description: ${env:DESC}
+    memorySize: 1536
+    timeout: 30
+    handler: src/handlers/screenshot.default
+    events:
+      - http:
+          path: /
+          method: any
+
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Properties:
+        BinaryMediaTypes:
+          - "*/*"
