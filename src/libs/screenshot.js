@@ -56,7 +56,7 @@ export default async function captureScreenshotOfUrl(url, mobile = false) {
         await Page.loadEventFired()
         await loading()
 
-        await sleep(2000)
+        await sleep(3000)
 
         const { result: { value: { height } } } = await Runtime.evaluate({
             expression: `(
@@ -72,10 +72,10 @@ export default async function captureScreenshotOfUrl(url, mobile = false) {
             scale: 1, // mobile ? 2 : 1,
             fitWindow: false,
             width: mobile ? 375 : 1280,
-            height,
+            height: 3000,
         })
 
-        await sleep(5000)
+        await sleep(6000)
 
         const screenshot = await Page.captureScreenshot({ format: 'png' })
 

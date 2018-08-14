@@ -2,7 +2,7 @@ service: ${env:SERVICE_NAME}
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: ${env:ENV}
   region: ap-southeast-2
   environment:
@@ -24,16 +24,23 @@ plugins:
   - serverless-plugin-chrome
   - serverless-webpack
 #  - serverless-offline
-
+ 
 custom:
   chrome:
     flags:
       - --window-size=1280,1696 # Letter size
       - --hide-scrollbars
+  webpack:
+    webpackConfig: 'webpack.config.js'   # Name of webpack configuration file
+    includeModules: true   # Node modules configuration for packaging
+    packager: 'npm'
+    mode: production
+    forceExclude:
+      - aws-sdk
 
 functions:
   screenshot:
-    description: ${env:DESC}
+    description: ${env:DESC}, optional save to s3
     memorySize: 1536
     timeout: 30
     handler: src/handlers/screenshot.default
@@ -41,6 +48,18 @@ functions:
       - http:
           path: /
           method: any
+          cors: true
+
+  pdf:
+    description: ${env:DESC}, returns pdf
+    memorySize: 1536
+    timeout: 30
+    handler: src/handlers/pdf.default
+    events:
+      - http:
+          path: pdf
+          method: any
+          cors: true
 
 resources:
   Resources:
@@ -48,3 +67,4 @@ resources:
       Properties:
         BinaryMediaTypes:
           - "*/*"
+          

@@ -1,0 +1,8 @@
+verbose: false
+instrumentation:
+  root: /opt/app/src
+  excludes: ["**/libs/**"]
+  include-all-sources: true
+reporting:
+  reports:
+    - html
