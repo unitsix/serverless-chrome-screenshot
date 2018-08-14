@@ -12,7 +12,6 @@
     },
     "dependencies": {
         "@vaya/logdna-formatter": "^0.1.0",
-        "analytics-node": "^3.3.0",
         "babel": "^6.23.0",
         "babel-loader": "^7.1.4",
         "babel-plugin-transform-runtime": "^6.23.0",
